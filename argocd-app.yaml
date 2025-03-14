@@ -1,0 +1,18 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: my-app
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/chiomanwanedo/cadd_project_2.git
+    targetRevision: main
+    path: .  
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: default  # Deploying to 'default' namespace in AWS EKS
+  syncPolicy:
+    automated:
+      prune: true    # Removes resources not defined in Git
+      selfHeal: true # Ensures cluster matches Git state
