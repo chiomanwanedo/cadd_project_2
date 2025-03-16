@@ -29,14 +29,16 @@ pipeline {
 
         stage("Push the changed deployment file to Git") {
             steps {
-                sh """
-                   git config --global user.name "chiomanwanedo"
-                   git config --global user.email "chiomavanessa08@gmail.com"
-                   git add deployment.yaml
-                   git commit -m "Updated Deployment Manifest"
-                   git pull --rebase origin main  # Fetch latest changes before pushing
-                   git push origin main
-                """
+                withCredentials([usernamePassword(credentialsId: 'github', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
+                    sh """
+                        git config --global user.name "chiomanwanedo"
+                        git config --global user.email "chiomavanessa08@gmail.com"
+                        git add deployment.yaml
+                        git commit -m "Updated Deployment Manifest"
+                        git pull --rebase origin main
+                        git push https://$GIT_USERNAME:$GIT_PASSWORD@github.com/chiomanwanedo/cadd_project_2.git main
+                    """
+                }
             }
         }
     }
