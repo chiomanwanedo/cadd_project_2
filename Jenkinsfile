@@ -1,7 +1,7 @@
 pipeline {
     agent { label "jenkins-agent" }
     environment {
-              APP_NAME = "register-app-pipeline"
+        APP_NAME = "register-app-pipeline"
     }
 
     stages {
@@ -12,9 +12,9 @@ pipeline {
         }
 
         stage("Checkout from SCM") {
-               steps {
-                   git branch: 'main', credentialsId: 'github', url: 'https://github.com/Ashfaque-9x/gitops-register-app'
-               }
+            steps {
+                git branch: 'main', credentialsId: 'github', url: 'https://github.com/Ashfaque-9x/gitops-register-app'
+            }
         }
 
         stage("Update the Deployment Tags") {
@@ -34,12 +34,10 @@ pipeline {
                    git config --global user.email "vanessaegwube08@gmail.com"
                    git add deployment.yaml
                    git commit -m "Updated Deployment Manifest"
+                   git pull --rebase origin main  # Fetch latest changes before pushing
+                   git push origin main
                 """
-                withCredentials([gitUsernamePassword(credentialsId: 'github', gitToolName: 'Default')]) {
-                  sh "git push https://github.com/chiomanwanedo/cadd_project_2 main"
-                }
             }
         }
-      
     }
 }
