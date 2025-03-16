@@ -13,7 +13,7 @@ pipeline {
 
         stage("Checkout from SCM") {
             steps {
-                git branch: 'main', credentialsId: 'github', url: 'https://github.com/Ashfaque-9x/gitops-register-app'
+                git branch: 'main', credentialsId: 'github', url: 'https://github.com/chiomanwanedo/cadd_project_2.git'
             }
         }
 
@@ -31,7 +31,7 @@ pipeline {
             steps {
                 sh """
                    git config --global user.name "chiomanwanedo"
-                   git config --global user.email "vanessaegwube08@gmail.com"
+                   git config --global user.email "chiomavanessa08@gmail.com"
                    git add deployment.yaml
                    git commit -m "Updated Deployment Manifest"
                    git pull --rebase origin main  # Fetch latest changes before pushing
