@@ -21,7 +21,7 @@ pipeline {
             steps {
                 sh """
                    cat deployment.yaml
-                   sed -i 's/${APP_NAME}.*/${APP_NAME}:${IMAGE_TAG}/g' deployment.yaml
+                   sed -i 's#${APP_NAME}.*#${APP_NAME}:${IMAGE_TAG}#g' deployment.yaml
                    cat deployment.yaml
                 """
             }
@@ -33,9 +33,20 @@ pipeline {
                     sh """
                         git config --global user.name "chiomanwanedo"
                         git config --global user.email "chiomavanessa08@gmail.com"
+
+                        # Ensure the branch is up to date
+                        git fetch origin main
+                        git checkout main
+                        git reset --hard origin/main
+
+                        # Add the updated file and commit
                         git add deployment.yaml
                         git commit -m "Updated Deployment Manifest"
-                        git pull --rebase origin main
+
+                        # Pull latest changes and rebase safely
+                        git pull --rebase origin main || git rebase --abort
+
+                        # Push the changes after successful rebase
                         git push https://$GIT_USERNAME:$GIT_PASSWORD@github.com/chiomanwanedo/cadd_project_2.git main
                     """
                 }
